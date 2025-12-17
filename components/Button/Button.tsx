@@ -16,12 +16,20 @@ type Props = DetailedHTMLProps<
 };
 
 const Button = forwardRef<HTMLButtonElement, Props>(function Button(
-  { variant = "secondary", withCaret = false, className, children, ...rest },
+  {
+    variant = "secondary",
+    withCaret = false,
+    className,
+    children,
+    type,
+    ...rest
+  },
   ref
 ) {
   return (
     <button
       ref={ref}
+      type={type ?? "button"}
       className={cn(
         css.btn,
         css[variant],
