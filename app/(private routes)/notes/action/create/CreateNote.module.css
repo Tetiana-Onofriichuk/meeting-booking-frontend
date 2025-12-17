@@ -1,0 +1,29 @@
+.page {
+  min-height: calc(100dvh - 240px);
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 2vh, 32px);
+  overflow: clip;
+}
+
+.card {
+  width: min(100%, 560px);
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  border: 1px solid color-mix(in oklab, var(--header-fg) 12%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: clamp(14px, 2.4vh, 24px);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.title {
+  margin: 0 0 clamp(10px, 2vh, 18px);
+  font-size: clamp(20px, 2.4vh, 26px);
+  line-height: 1.2;
+  text-align: center;
+  color: var(--foreground);
+}

@@ -1,0 +1,75 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-h, 40px);
+  padding: 0 12px;
+  border-radius: var(--btn-radius, 8px);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.secondary {
+  background: var(--header-bg);
+  color: var(--header-fg);
+  border-color: color-mix(in oklab, var(--header-fg) 20%, transparent);
+}
+.secondary:hover,
+.secondary:focus-visible {
+  background: var(--background);
+  color: #000;
+  outline: none;
+}
+:global(:root[data-theme="dark"]) .secondary:hover,
+:global(:root[data-theme="dark"]) .secondary:focus-visible {
+  color: var(--foreground);
+}
+
+.primary {
+  background: var(--accent, #2563eb);
+  color: var(--accent-fg, #fff);
+  border-color: var(--accent, #2563eb);
+}
+.primary:hover,
+.primary:focus-visible {
+  background: var(--accent-hover, #1d4ed8);
+  border-color: var(--accent-hover, #1d4ed8);
+  outline: none;
+}
+
+.icon {
+  width: var(--btn-h, 40px);
+  padding: 0;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  border: 1px solid color-mix(in oklab, var(--header-fg) 20%, transparent);
+}
+.icon:hover,
+.icon:focus-visible {
+  background: var(--background);
+  color: #000;
+}
+:global(:root[data-theme="dark"]) .icon:hover,
+:global(:root[data-theme="dark"]) .icon:focus-visible {
+  color: var(--foreground);
+}
+
+.withCaret {
+  gap: 6px;
+}
+
+.btn svg {
+  display: block;
+}
+.btn span,
+.btn i {
+  display: block;
+  line-height: 1;
+}

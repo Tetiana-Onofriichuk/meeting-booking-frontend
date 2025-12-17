@@ -1,0 +1,87 @@
+.header {
+  --header-gap: 12px;
+  --header-h: 40px;
+  --radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+
+  padding: 12px 24px;
+  margin-bottom: 24px;
+
+  background-color: var(--header-bg);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--header-fg) 10%, transparent);
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--header-fg);
+  text-decoration: none;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--header-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navigation > li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navlink,
+.navigation > li > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--header-h);
+  padding: 0 12px;
+  line-height: 1;
+  border-radius: var(--radius);
+  color: var(--header-fg);
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.navlink:hover,
+.navigation > li > a:hover,
+.navlink:focus-visible,
+.navigation > li > a:focus-visible,
+.navlink[aria-current="page"],
+.navigation > li > a[aria-current="page"] {
+  background-color: var(--background);
+  color: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navlink,
+  .navigation > li > a {
+    transition: none;
+  }
+}
+:global(:root[data-theme="dark"]) .navlink:hover,
+:global(:root[data-theme="dark"]) .navigation > li > a:hover,
+:global(:root[data-theme="dark"]) .navlink:focus-visible,
+:global(:root[data-theme="dark"]) .navigation > li > a:focus-visible,
+:global(:root[data-theme="dark"]) .navlink[aria-current="page"],
+:global(:root[data-theme="dark"]) .navigation > li > a[aria-current="page"] {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.profile {
+}

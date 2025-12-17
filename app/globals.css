@@ -1,0 +1,148 @@
+/* =========================================================
+   ТЕМИ / ЗМІННІ
+   ========================================================= */
+
+:root {
+  /* базові кольори (fallback) */
+  --background: #ffffff;
+  --foreground: #29252bff;
+
+  /* зони хедера/футера */
+  --header-bg: #f5f7fb;
+  --header-fg: #29252bff;
+
+  /* UI-токени */
+  --btn-h: 40px;
+  --btn-radius: 8px;
+  --accent: #b1c8e5ff;
+  --accent-hover: #6a9fe0ff;
+  --accent-fg: #29252bff;
+
+  color-scheme: light;
+  font-family: var(--font-roboto), sans-serif;
+}
+
+/* Вручну обрана світла тема */
+:root[data-theme="light"] {
+  --background: #b1c8e5ff;
+  --foreground: #29252bff;
+  --header-bg: #ebedf2ff;
+  --header-fg: #29252bff;
+  color-scheme: light;
+}
+
+/* Вручну обрана темна тема */
+:root[data-theme="dark"] {
+  --background: #322d43ff;
+  --foreground: #ededed;
+  --header-bg: #1a1c20;
+  --header-fg: #ededed;
+  color-scheme: dark;
+}
+
+/* Автовибір темної теми від системи, якщо явно не задано data-theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --background: #322d43ff;
+    --foreground: #ededed;
+    --header-bg: #1a1c20;
+    --header-fg: #ededed;
+    color-scheme: dark;
+  }
+}
+
+/* =========================================================
+   БАЗА/РЕСЕТ/СТРУКТУРА
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Документ */
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+}
+
+/* Типографіка + фон */
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-roboto), sans-serif;
+
+  /* плавна зміна теми */
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Головний контент між хедером і футером */
+main {
+  flex: 1 1 auto;
+  min-height: 0; /* не роздувати контейнер */
+}
+
+/* Посилання наслідують колір */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* (опційно) вертикальний відступ під футер у деяких сторінок
+   .notes-list, .app { padding-bottom: 80px; }
+*/
+
+/* =========================================================
+   РЕЖИМ БЕЗ СКРОЛІВ (повністю вимикаємо прокрутку скрізь)
+   ========================================================= */
+
+html,
+body {
+  overflow: hidden; /* ніякої прокрутки у вікна */
+}
+
+#__next {
+  height: 100%;
+}
+
+/* головна зона контенту — без внутрішнього скролу, зайве обрізаємо */
+main {
+  overflow: clip;
+}
+
+/* запобіжник: популярні контейнери не створюють скрол */
+:where(.container, .app, .notesWrapper, .mainContent, .noteListWrapper) {
+  overflow: clip !important;
+  height: auto;
+  max-height: 100%;
+}
+
+/* приховати смуги прокрутки у всіх браузерах (навіть якщо десь просочиться) */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   ПОВЕДІНКА ПРИ ЗМЕНШЕННІ РУХУ
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

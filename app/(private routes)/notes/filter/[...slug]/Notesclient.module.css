@@ -1,0 +1,59 @@
+.toolbar {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  padding: 12px;
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--header-fg) 12%, transparent);
+  border-radius: 10px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.searchWrap {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar :where(input[type="text"], input[type="search"]) {
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, var(--header-fg) 22%, transparent);
+  background-color: color-mix(in oklab, var(--header-fg) 10%, transparent);
+  color: var(--header-fg);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.06s ease;
+}
+
+.button:hover {
+  background-color: color-mix(in oklab, var(--header-fg) 16%, transparent);
+}
+.button:active {
+  transform: translateY(1px);
+}
+.button:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--header-fg) 40%, transparent);
+  outline-offset: 2px;
+}

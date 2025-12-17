@@ -1,0 +1,106 @@
+.mainContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+}
+
+.profileCard {
+  width: 100%;
+  max-width: 560px;
+
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  border: 1px solid color-mix(in oklab, var(--header-fg) 12%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  text-align: left;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--header-fg);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 16px;
+  color: var(--header-fg);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.label {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--header-fg);
+}
+
+.value {
+  font-weight: 400;
+  color: color-mix(in oklab, var(--header-fg) 85%, transparent);
+}
+
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .mainContent {
+    padding: 20px;
+  }
+
+  .profileCard {
+    padding: 20px;
+  }
+
+  .formTitle {
+    font-size: 28px;
+  }
+
+  .avatar {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profileCard {
+    transition: none;
+  }
+}

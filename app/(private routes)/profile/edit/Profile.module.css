@@ -1,0 +1,160 @@
+.mainContent {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 2vh, 32px);
+  /* синхронізовано з create-note */
+  min-height: calc(100dvh - 240px);
+  overflow: clip;
+}
+
+.loading {
+  text-align: center;
+  padding: 24px;
+}
+
+/* Картка */
+.profileCard {
+  width: min(540px, 92vw); /* було 560 -> зробили трішки вужче */
+  max-height: 100%;
+  overflow: clip;
+
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  border: 1px solid color-mix(in oklab, var(--header-fg) 12%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  padding: clamp(14px, 2.2vh, 22px); /* трохи компактніше */
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Шапка картки: заголовок + кнопка праворуч */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: clamp(8px, 1.6vh, 14px);
+}
+
+.formTitle {
+  margin: 0;
+  font-size: clamp(20px, 2.6vh, 28px); /* -чуть менше */
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--header-fg);
+}
+
+/* Аватар */
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(10px, 1.8vh, 16px);
+}
+
+.avatar {
+  /* більш “коробочна” адаптація за шириною картки, не за vh */
+  width: clamp(96px, 28vw, 180px);
+  height: clamp(96px, 28vw, 180px);
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.02));
+}
+
+/* Форма всередині картки */
+.form {
+  width: 100%;
+  max-width: 420px; /* тримаємо колонки щільно */
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 12px);
+  text-align: left; /* забрали центр */
+}
+
+.label,
+.valueMuted,
+.error {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, var(--header-fg) 20%, transparent);
+  background-color: var(--background);
+  color: var(--foreground);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    outline-color 0.2s ease;
+}
+
+.input:focus {
+  outline: 2px solid color-mix(in oklab, var(--header-fg) 50%, transparent);
+  outline-offset: 2px;
+}
+
+.valueMuted {
+  color: color-mix(in oklab, var(--header-fg) 70%, transparent);
+  font-size: 15px;
+}
+
+.error {
+  margin-top: 2px;
+  color: #ef4444;
+  font-size: 14px;
+}
+
+.actions {
+  margin-top: clamp(8px, 1.4vh, 12px);
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .profileCard {
+    padding: clamp(12px, 2vh, 18px);
+  }
+  .headerRow {
+    gap: 8px;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .actions > * {
+    width: 100%;
+  } /* кнопки на всю ширину */
+}
+
+/* Менш високі екрани */
+@media (max-height: 720px) {
+  .mainContent {
+    min-height: calc(100dvh - 200px);
+  }
+  .avatar {
+    width: clamp(84px, 24vw, 160px);
+    height: clamp(84px, 24vw, 160px);
+  }
+  .formTitle {
+    font-size: clamp(18px, 2.4vh, 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profileCard,
+  .input {
+    transition: none;
+  }
+}

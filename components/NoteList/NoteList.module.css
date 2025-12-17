@@ -1,0 +1,161 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 0;
+  margin: 0 0 50px 0;
+  list-style: none;
+  align-items: stretch;
+}
+
+.card {
+  width: 260px;
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  background-color: var(--header-bg);
+  color: var(--foreground);
+  border: 1px solid color-mix(in oklab, var(--foreground) 15%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.4s ease forwards;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Верхній ряд з тайтлом і тегом */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 28px;
+}
+
+.titleLink {
+  text-decoration: none;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.titleLink:hover .title,
+.titleLink:focus .title {
+  text-decoration-thickness: 2px;
+}
+
+.tag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+
+  /* світла/темна тема */
+  background-color: color-mix(
+    in oklab,
+    var(--foreground) 10%,
+    var(--background)
+  );
+  color: var(--foreground);
+  border: 1px solid color-mix(in oklab, var(--foreground) 20%, transparent);
+}
+
+/* Текст нотатки */
+.content {
+  margin: 0;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+  line-height: 1.4;
+  max-height: 6.5rem;
+  overflow: hidden;
+  margin: 0;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+  line-height: 1.4;
+  overflow: hidden;
+
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Футер */
+.footer {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Порожній стан */
+.empty {
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+/* Анімація появи */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 420px) {
+  .actions {
+    gap: 8px;
+    flex-direction: column;
+  }
+  .actions > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    align-items: start;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .tag {
+    order: 2;
+  }
+}

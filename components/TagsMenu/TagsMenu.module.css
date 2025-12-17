@@ -1,0 +1,46 @@
+.menuContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.menuList {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  z-index: 1000;
+
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  border: 1px solid color-mix(in oklab, var(--header-fg) 20%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--header-fg) 15%, transparent);
+}
+
+.menuItem {
+  margin: 0;
+}
+
+.menuLink {
+  display: block;
+  padding: 8px 16px;
+  font-size: 15px;
+  color: var(--header-fg);
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.menuLink:hover,
+.activeMenuLink {
+  background-color: var(--background);
+  color: #000;
+}
+:global(:root[data-theme="dark"]) .menuLink:hover,
+:global(:root[data-theme="dark"]) .activeMenuLink {
+  color: var(--foreground);
+}
