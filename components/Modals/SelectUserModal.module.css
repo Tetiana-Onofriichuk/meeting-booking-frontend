@@ -1,0 +1,104 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.modal {
+  width: min(520px, 100%);
+  border-radius: 16px;
+  background: var(--color-neutral-lightest);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-neutral-darker);
+}
+
+.close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-neutral-darker);
+}
+
+.muted {
+  padding: 14px 16px;
+  color: var(--color-muted);
+}
+
+.list {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.userRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  border: 1px solid var(--color-border);
+  background: var(--color-deco-light);
+  cursor: pointer;
+  text-align: left;
+}
+
+.userRow:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.userName {
+  font-weight: 800;
+  color: var(--color-neutral-darker);
+}
+
+.badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-neutral-dark);
+  text-transform: capitalize;
+}
+
+.footer {
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.errorBox {
+  margin: 12px 16px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: var(--color-danger);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 40%, transparent);
+  background: color-mix(in srgb, var(--color-danger) 10%, var(--color-white));
+}

@@ -1,4 +1,5 @@
 import type { Booking } from "@/types/booking";
+import type { User } from "@/types/user";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -100,6 +101,50 @@ export async function cancelBooking(
   id: string
 ): Promise<{ success: boolean } | void> {
   return await request<{ success: boolean } | void>(`/bookings/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getUsers(params?: {
+  role?: "client" | "business";
+}): Promise<User[]> {
+  const searchParams = new URLSearchParams();
+  if (params?.role) searchParams.append("role", params.role);
+  const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
+  return await request<User[]>(`/users${query}`);
+}
+
+export async function createUser(data: {
+  name: string;
+  email: string;
+  role: "client" | "business";
+  avatarUrl?: string;
+}): Promise<User> {
+  return await request<User>("/users", {
+    method: "POST",
+    body: data,
+  });
+}
+
+export async function updateUser(
+  id: string,
+  data: Partial<{
+    name: string;
+    email: string;
+    role: "client" | "business";
+    avatarUrl: string;
+  }>
+): Promise<User> {
+  return await request<User>(`/users/${id}`, {
+    method: "PATCH",
+    body: data,
+  });
+}
+
+export async function deleteUser(
+  id: string
+): Promise<{ success: boolean } | void> {
+  return await request<{ success: boolean } | void>(`/users/${id}`, {
     method: "DELETE",
   });
 }

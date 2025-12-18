@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import css from "./Header.module.css";
-
+import UserPanel from "./UserPanel/UserPanel";
 export default function Header() {
   const pathname = usePathname();
 
@@ -41,6 +41,7 @@ export default function Header() {
                 Dashboard
               </Link>
             </li>
+
             <li>
               <Link
                 href="/book"
@@ -50,6 +51,10 @@ export default function Header() {
               </Link>
             </li>
           </ul>
+
+          <div className={css.userArea}>
+            <UserPanel />
+          </div>
         </div>
       </div>
     </header>

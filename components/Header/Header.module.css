@@ -2,23 +2,32 @@
   background-color: var(--color-neutral);
   padding: 0 18px;
 }
+
 .navigation {
   display: flex;
   align-items: center;
+  gap: 32px;
 }
-.navigationList {
-  display: flex;
-  gap: 48px;
-}
+
 .logo {
   width: 48px;
   height: 48px;
-  color:  var(--color-deco-light)
+  color: var(--color-deco-light);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 460px;
 }
+
+.navigationList {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
 .navigationLink {
   position: relative;
   font-weight: 400;
@@ -26,6 +35,7 @@
   line-height: 150%;
   color: var(--color-neutral-darkest);
   transition: color 120ms ease;
+  text-decoration: none;
 }
 
 .navigationLink::after {
@@ -33,13 +43,10 @@
   position: absolute;
   left: 0;
   bottom: -4px;
-
   width: 100%;
   height: 2px;
   border-radius: 2px;
-
   background-color: var(--color-deco-light);
-
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 160ms ease;
@@ -49,10 +56,16 @@
 .navigationLink:focus {
   color: var(--color-deco-light);
 }
-.navigationLink.active {
+
+.active {
   color: var(--color-deco-light);
 }
 
-.navigationLink.active::after {
+.active::after {
   transform: scaleX(1);
+}
+
+.userArea {
+  display: flex;
+  align-items: center;
 }

@@ -1,0 +1,64 @@
+.form {
+  display: grid;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111;
+}
+
+.input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #111;
+}
+
+.textarea {
+  resize: none;
+}
+
+.error {
+  color: #c00;
+  font-size: 13px;
+}
+
+.info {
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #444;
+}
+
+.submit {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit:hover {
+  opacity: 0.9;
+}
