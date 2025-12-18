@@ -45,7 +45,7 @@ export default function SelectUserModal({
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className={css.head}>
-          <h3 className={css.title}>Вхід</h3>
+          <h3 className={css.title}>Log in</h3>
           <Button variant="icon" onClick={onClose} aria-label="Close">
             ✕
           </Button>
@@ -54,9 +54,9 @@ export default function SelectUserModal({
         {error && users.length === 0 ? (
           <div className={css.errorBox}>{error}</div>
         ) : isLoading && users.length === 0 ? (
-          <div className={css.muted}>Завантаження…</div>
+          <div className={css.muted}>Loading…</div>
         ) : users.length === 0 ? (
-          <div className={css.muted}>Немає користувачів. Створи нового.</div>
+          <div className={css.muted}>No users found. Create a new one.</div>
         ) : (
           <div className={css.list}>
             {users.map((u) => (
@@ -85,7 +85,7 @@ export default function SelectUserModal({
                 onOpenCreate?.();
               }}
             >
-              Реєстрація
+              Sign up
             </Button>
           </div>
         )}

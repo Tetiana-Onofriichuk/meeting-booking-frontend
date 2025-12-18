@@ -1,6 +1,6 @@
 import type { User } from "./user";
 
-export type BookingStatus = "active" | "cancelled" | "completed";
+export type BookingStatus = "active" | "canceled";
 
 export type Booking = {
   _id: string;

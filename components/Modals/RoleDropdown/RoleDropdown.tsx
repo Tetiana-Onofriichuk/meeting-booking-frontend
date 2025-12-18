@@ -24,7 +24,7 @@ export default function RoleDropdown({
   value,
   onChange,
   disabled = false,
-  label = "Роль",
+  label = "Role",
 }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);

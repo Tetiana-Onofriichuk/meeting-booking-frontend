@@ -31,11 +31,11 @@ export default function UserPanel() {
     <>
       <div className={css.wrap}>
         <Button variant="secondary" onClick={() => setOpenSelect(true)}>
-          Вхід
+          Log in
         </Button>
 
         <Button variant="primary" onClick={() => setOpenCreate(true)}>
-          Реєстрація
+          Sign up
         </Button>
       </div>
 

@@ -69,7 +69,7 @@ export default function CreateUserModal({
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className={css.head}>
-          <h3 className={css.title}>Реєстрація</h3>
+          <h3 className={css.title}>Sign up</h3>
           <Button variant="icon" onClick={onClose} aria-label="Close">
             ✕
           </Button>
@@ -79,7 +79,7 @@ export default function CreateUserModal({
 
         <div className={css.body}>
           <label className={css.field}>
-            <span className={css.label}>Імʼя (до 8 символів)</span>
+            <span className={css.label}>Name (max 8 chars)</span>
             <input
               className={css.input}
               value={name}
@@ -102,7 +102,7 @@ export default function CreateUserModal({
           <RoleDropdown value={role} onChange={setRole} disabled={isLoading} />
 
           <Button variant="primary" disabled={!canSubmit} onClick={submit}>
-            {isLoading ? "Створюю…" : "Створити"}
+            {isLoading ? "Creating…" : "Create"}
           </Button>
 
           {onOpenSelect && (
@@ -114,7 +114,7 @@ export default function CreateUserModal({
                   onOpenSelect?.();
                 }}
               >
-                Вхід
+                Log in
               </Button>
             </div>
           )}
