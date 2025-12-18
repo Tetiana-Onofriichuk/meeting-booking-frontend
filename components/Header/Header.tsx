@@ -8,7 +8,7 @@ export default function Header() {
   const pathname = usePathname();
 
   const isHome = pathname === "/";
-  const isCatalog = pathname.startsWith("/dashboard");
+  const isDashboard = pathname.startsWith("/dashboard");
   const isBook = pathname.startsWith("/book");
 
   return (
@@ -35,7 +35,7 @@ export default function Header() {
               <Link
                 href="/dashboard"
                 className={`${css.navigationLink} ${
-                  isCatalog ? css.active : ""
+                  isDashboard ? css.active : ""
                 }`}
               >
                 Dashboard
@@ -44,9 +44,7 @@ export default function Header() {
             <li>
               <Link
                 href="/book"
-                className={`${css.navigationLink} ${
-                  isCatalog ? css.active : ""
-                }`}
+                className={`${css.navigationLink} ${isBook ? css.active : ""}`}
               >
                 Book
               </Link>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/Button/Button";
 import css from "./HomeHero.module.css";
 
@@ -18,8 +19,13 @@ export default function HomeHero() {
             </p>
 
             <div className={css.actions}>
-              <Button variant="primary">Create meeting</Button>
-              <Button variant="secondary">View schedule</Button>
+              <Link href="/book">
+                <Button variant="primary">Create meeting</Button>
+              </Link>
+
+              <Link href="/dashboard">
+                <Button variant="secondary">View schedule</Button>
+              </Link>
             </div>
           </div>
 

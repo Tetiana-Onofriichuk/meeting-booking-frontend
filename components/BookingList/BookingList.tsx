@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useBookingStore } from "@/store/bookingStore";
 import EmptyState from "@/components/EmptyState/EmptyState";
 import styles from "./BookingList.module.css";
+import BookingCard from "@/components/BookingCard/BookingCard";
 
 type Props = {
   clientId?: string;
@@ -33,16 +34,7 @@ export default function BookingList({ clientId, businessId }: Props) {
     <ul className={styles.list}>
       {bookings.map((booking) => (
         <li key={booking._id} className={styles.item}>
-          <div className={styles.title}>
-            {booking.clientId.name} → {booking.businessId.name}
-          </div>
-
-          <div className={styles.time}>
-            {new Date(booking.startAt).toLocaleString()} –{" "}
-            {new Date(booking.endAt).toLocaleString()}
-          </div>
-
-          <div className={styles.status}>Status: {booking.status}</div>
+          <BookingCard booking={booking} />
         </li>
       ))}
     </ul>
