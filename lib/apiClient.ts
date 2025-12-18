@@ -1,3 +1,5 @@
+import type { Booking } from "@/types/booking";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 if (!API_BASE_URL) {
@@ -8,6 +10,15 @@ type RequestOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   body?: unknown;
 };
+
+type ApiResponse<T> = T | { data: T };
+
+function unwrapData<T>(json: ApiResponse<T>): T {
+  if (json && typeof json === "object" && "data" in json) {
+    return (json as { data: T }).data;
+  }
+  return json as T;
+}
 
 async function request<T>(
   url: string,
@@ -39,14 +50,14 @@ async function request<T>(
     throw new Error(message);
   }
 
-  const data = await response.json();
-  return data;
+  const json = (await response.json()) as ApiResponse<T>;
+  return unwrapData(json);
 }
 
 export async function getBookings(params?: {
   clientId?: string;
   businessId?: string;
-}) {
+}): Promise<Booking[]> {
   const searchParams = new URLSearchParams();
 
   if (params?.clientId) searchParams.append("clientId", params.clientId);
@@ -54,7 +65,7 @@ export async function getBookings(params?: {
 
   const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
 
-  return await request(`/bookings${query}`);
+  return await request<Booking[]>(`/bookings${query}`);
 }
 
 export async function createBooking(data: {
@@ -63,8 +74,8 @@ export async function createBooking(data: {
   startAt: string;
   endAt: string;
   notes?: string;
-}) {
-  return await request("/bookings", {
+}): Promise<Booking> {
+  return await request<Booking>("/bookings", {
     method: "POST",
     body: data,
   });
@@ -78,15 +89,17 @@ export async function updateBooking(
     notes: string;
     status: string;
   }>
-) {
-  return await request(`/bookings/${id}`, {
+): Promise<Booking> {
+  return await request<Booking>(`/bookings/${id}`, {
     method: "PATCH",
     body: data,
   });
 }
 
-export async function cancelBooking(id: string) {
-  return await request(`/bookings/${id}`, {
+export async function cancelBooking(
+  id: string
+): Promise<{ success: boolean } | void> {
+  return await request<{ success: boolean } | void>(`/bookings/${id}`, {
     method: "DELETE",
   });
 }
