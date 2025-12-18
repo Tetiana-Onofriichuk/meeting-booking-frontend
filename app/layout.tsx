@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header/Header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,6 +21,7 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={inter.variable}>
+      <Header />
       <body>{children}</body>
     </html>
   );

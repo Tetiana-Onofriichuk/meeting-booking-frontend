@@ -10,44 +10,37 @@
 }
 
 :root {
-  /* Base colors */
-  --color-white: #ffffff;
-  --color-black: #111111;
+  --color-neutral-darkest: #000;
+  --color-white: #fff;
 
-  /* Gray scale */
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
+  --color-neutral-lighter: #d8d8d8;
+  --color-neutral-lightest: #f2f2f2;
+  --color-neutral-light: #b2b2b2;
+  --color-neutral: #7f7f7f;
+  --color-neutral-dark: #4c4c4c;
+  --color-neutral-darker: #191919;
 
-  /* Green (accent / primary) */
-  --color-green-50: #f0fdf4;
-  --color-green-100: #dcfce7;
-  --color-green-200: #bbf7d0;
-  --color-green-300: #86efac;
-  --color-green-400: #4ade80;
-  --color-green-500: #22c55e;
-  --color-green-600: #16a34a;
-  --color-green-700: #15803d;
-  --color-green-800: #166534;
-  --color-green-900: #14532d;
+  --opacity-neutral-darkest-15: rgba(0, 0, 0, 0.15);
+  --opacity-neutral-darkest-20: rgba(0, 0, 0, 0.2);
 
-  /* Semantic aliases */
-  --color-bg: var(--color-gray-200);
-  --color-text: var(--color-gray-900);
-  --color-muted: var(--color-gray-500);
+  --color-deco-lightest: #f9fcf6;
+  --color-deco-lighter: #f3f9ed;
+  --color-deco-light: #d6eac0;
+  --color-deco: #c5e1a5;
+  --color-deco-dark: #9db484;
+  --color-deco-darker: #4e5a42;
+  --color-deco-darkest: #3b4331;
 
-  --color-border: var(--color-gray-200);
+  --color-bg: #3c3c3b;
+  --color-text: var(--color-deco-light);
+  --color-muted: var(--color-neutral);
+  --color-border: var(--opacity-neutral-darkest-20);
 
-  --color-primary: var(--color-green-600);
-  --color-primary-hover: var(--color-green-700);
-  --color-primary-soft: var(--color-green-100);
+  --color-primary: var(--color-deco);
+  --color-primary-hover: var(--color-deco-dark);
+  --color-primary-soft: var(--color-deco-lighter);
+
+  --color-danger: #9d0000;
 }
 
 html {
@@ -102,7 +95,6 @@ select {
 button {
   cursor: pointer;
   background: none;
-  border: none;
   padding: 0;
 }
 

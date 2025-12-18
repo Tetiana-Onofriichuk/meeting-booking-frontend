@@ -1,0 +1,47 @@
+.hero {
+  padding: 96px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  align-items: center;
+  gap: 48px;
+}
+
+.content {
+  max-width: 640px;
+}
+
+.title {
+  margin: 0 0 24px;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-deco-light);
+}
+
+.description {
+  margin: 0 0 40px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-neutral-light);
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+}
+
+.imageWrap {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
