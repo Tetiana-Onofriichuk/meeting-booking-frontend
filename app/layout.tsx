@@ -21,8 +21,10 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={inter.variable}>
-      <Header />
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
