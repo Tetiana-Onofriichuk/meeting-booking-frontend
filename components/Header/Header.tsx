@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import css from "./Header.module.css";
-
+import UserPanel from "./UserPanel/UserPanel";
 export default function Header() {
   const pathname = usePathname();
 
   const isHome = pathname === "/";
-  const isCatalog = pathname.startsWith("/dashboard");
+  const isDashboard = pathname.startsWith("/dashboard");
   const isBook = pathname.startsWith("/book");
 
   return (
@@ -35,23 +35,26 @@ export default function Header() {
               <Link
                 href="/dashboard"
                 className={`${css.navigationLink} ${
-                  isCatalog ? css.active : ""
+                  isDashboard ? css.active : ""
                 }`}
               >
                 Dashboard
               </Link>
             </li>
+
             <li>
               <Link
                 href="/book"
-                className={`${css.navigationLink} ${
-                  isCatalog ? css.active : ""
-                }`}
+                className={`${css.navigationLink} ${isBook ? css.active : ""}`}
               >
                 Book
               </Link>
             </li>
           </ul>
+
+          <div className={css.userArea}>
+            <UserPanel />
+          </div>
         </div>
       </div>
     </header>

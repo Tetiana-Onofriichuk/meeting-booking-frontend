@@ -1,0 +1,9 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.link {
+  text-decoration: none;
+}

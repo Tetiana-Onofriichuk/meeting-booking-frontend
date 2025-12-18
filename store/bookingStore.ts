@@ -7,35 +7,42 @@ import {
   cancelBooking as apiCancelBooking,
 } from "@/lib/apiClient";
 
+type BookingFetchParams = {
+  clientId?: string;
+  businessId?: string;
+};
+
+type CreateBookingDto = {
+  clientId: string;
+  businessId: string;
+  startAt: string;
+  endAt: string;
+  notes?: string;
+};
+
+type UpdateBookingDto = Partial<{
+  startAt: string;
+  endAt: string;
+  notes: string;
+}>;
+
 type BookingState = {
   bookings: Booking[];
   isLoading: boolean;
   error: string | null;
 
-  fetchBookings: (params?: {
-    clientId?: string;
-    businessId?: string;
-  }) => Promise<void>;
+  fetchBookings: (params?: BookingFetchParams) => Promise<void>;
 
-  createBooking: (data: {
-    clientId: string;
-    businessId: string;
-    startAt: string;
-    endAt: string;
-    notes?: string;
-  }) => Promise<Booking | null>;
+  createBooking: (data: CreateBookingDto) => Promise<Booking | null>;
 
   updateBooking: (
     id: string,
-    data: Partial<{
-      startAt: string;
-      endAt: string;
-      notes: string;
-      status: string;
-    }>
+    data: UpdateBookingDto
   ) => Promise<Booking | null>;
 
   cancelBooking: (id: string) => Promise<boolean>;
+
+  clear: () => void;
 };
 
 export const useBookingStore = create<BookingState>((set, get) => ({
@@ -62,7 +69,12 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     try {
       const booking = await apiCreateBooking(data);
 
-      set({ bookings: [booking, ...get().bookings] });
+      set((state) => ({
+        bookings: [...state.bookings, booking].sort(
+          (a, b) =>
+            new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
+        ),
+      }));
 
       return booking;
     } catch (e) {
@@ -80,9 +92,14 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     try {
       const updated = await apiUpdateBooking(id, data);
 
-      set({
-        bookings: get().bookings.map((b) => (b._id === id ? updated : b)),
-      });
+      set((state) => ({
+        bookings: state.bookings
+          .map((b) => (b._id === id ? updated : b))
+          .sort(
+            (a, b) =>
+              new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
+          ),
+      }));
 
       return updated;
     } catch (e) {
@@ -100,7 +117,11 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     try {
       await apiCancelBooking(id);
 
-      set({ bookings: get().bookings.filter((b) => b._id !== id) });
+      set((state) => ({
+        bookings: state.bookings.map((b) =>
+          b._id === id ? { ...b, status: "canceled" } : b
+        ),
+      }));
 
       return true;
     } catch (e) {
@@ -111,5 +132,9 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  clear: () => {
+    set({ bookings: [], isLoading: false, error: null });
   },
 }));
