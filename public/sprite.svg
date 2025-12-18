@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<symbol id="icon-logo" viewBox="0 0 32 32">
+ 
+  <path
+    d="M6 24V8h3.2l3.4 6.6L16 8h3.2v16h-2.8v-9.6l-3 5.8h-.9l-3-5.8V24H6z"
+    fill="currentColor"
+  />
+
+  
+  <path
+    d="M20 8h4.8c2.4 0 4 1.4 4 3.4 0 1.4-.8 2.4-2 2.9 1.6.4 2.6 1.7 2.6 3.4 0 2.4-1.9 3.9-4.6 3.9H20V8zm3 5.6h1.9c1.1 0 1.8-.5 1.8-1.4s-.7-1.4-1.8-1.4H23v2.8zm0 6.6h2.2c1.3 0 2.1-.6 2.1-1.6s-.8-1.6-2.1-1.6H23v3.2z"
+    fill="currentColor"
+  />
+</symbol>
+
+</svg>
+
+
+
