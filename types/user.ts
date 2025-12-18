@@ -1,5 +1,11 @@
+export type UserRole = "client" | "business";
+
 export type User = {
-  username: string;
+  _id: string;
+  name: string;
   email: string;
-  avatar: string;
+  role: UserRole;
+  avatarUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
