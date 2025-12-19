@@ -155,3 +155,7 @@ export async function deleteUser(id: string): Promise<void> {
     method: "DELETE",
   });
 }
+
+export async function getBusinesses(): Promise<User[]> {
+  return request<User[]>("/businesses");
+}

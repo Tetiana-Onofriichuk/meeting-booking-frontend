@@ -2,29 +2,26 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import cn from "clsx";
-import css from "./RoleDropdown.module.css";
+import css from "./Dropdown.module.css";
 
-export type Role = "client" | "business";
-
-type Option = { value: Role; label: string };
+export type DropdownOption = { value: string; label: string };
 
 type Props = {
-  value: Role;
-  onChange: (v: Role) => void;
+  value: string;
+  onChange: (v: string) => void;
+  options: DropdownOption[];
   disabled?: boolean;
   label?: string;
+  placeholder?: string;
 };
 
-const OPTIONS: Option[] = [
-  { value: "client", label: "client" },
-  { value: "business", label: "business" },
-];
-
-export default function RoleDropdown({
+export default function Dropdown({
   value,
   onChange,
+  options,
   disabled = false,
-  label = "Role",
+  label,
+  placeholder = "Select…",
 }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -47,22 +44,25 @@ export default function RoleDropdown({
   }, []);
 
   const currentLabel = useMemo(() => {
-    return OPTIONS.find((o) => o.value === value)?.label ?? value;
-  }, [value]);
+    if (!value) return placeholder;
+    return options.find((o) => o.value === value)?.label ?? placeholder;
+  }, [value, options, placeholder]);
 
   return (
     <div className={css.wrap} ref={rootRef}>
-      <div className={css.label}>{label}</div>
+      {label ? <div className={css.label}>{label}</div> : null}
 
       <button
         type="button"
         className={cn(css.trigger, open && css.open)}
         onClick={() => setOpen((v) => !v)}
-        disabled={disabled}
+        disabled={disabled || options.length === 0}
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <span className={css.value}>{currentLabel}</span>
+        <span className={cn(css.value, !value && css.placeholder)}>
+          {currentLabel}
+        </span>
 
         <span className={css.chevron} aria-hidden="true">
           <svg width="16" height="16">
@@ -73,7 +73,7 @@ export default function RoleDropdown({
 
       {open && (
         <ul className={css.menu} role="listbox">
-          {OPTIONS.map((o) => {
+          {options.map((o) => {
             const selected = o.value === value;
 
             return (
