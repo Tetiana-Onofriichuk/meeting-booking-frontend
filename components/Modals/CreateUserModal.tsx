@@ -4,9 +4,14 @@ import { useEffect, useState } from "react";
 import css from "./CreateUserModal.module.css";
 import { useUserStore } from "@/store/userStore";
 import Button from "@/components/Button/Button";
-import RoleDropdown from "@/components/Modals/RoleDropdown/RoleDropdown";
+import Dropdown, { DropdownOption } from "@/components/Dropdown/Dropdown";
 
 type Role = "client" | "business";
+
+const ROLE_OPTIONS: DropdownOption[] = [
+  { value: "client", label: "client" },
+  { value: "business", label: "business" },
+];
 
 type Props = {
   open: boolean;
@@ -34,10 +39,6 @@ export default function CreateUserModal({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-
-  useEffect(() => {
-    if (!open) return;
-  }, [open]);
 
   if (!open) return null;
 
@@ -84,7 +85,7 @@ export default function CreateUserModal({
               className={css.input}
               value={name}
               onChange={(e) => setName(e.target.value.slice(0, 8))}
-              placeholder="Напр. Tetiana"
+              placeholder="e.g. Tetiana"
               autoFocus
             />
           </label>
@@ -99,7 +100,13 @@ export default function CreateUserModal({
             />
           </label>
 
-          <RoleDropdown value={role} onChange={setRole} disabled={isLoading} />
+          <Dropdown
+            label="Role"
+            value={role}
+            options={ROLE_OPTIONS}
+            disabled={isLoading}
+            onChange={(v) => setRole(v as Role)}
+          />
 
           <Button variant="primary" disabled={!canSubmit} onClick={submit}>
             {isLoading ? "Creating…" : "Create"}

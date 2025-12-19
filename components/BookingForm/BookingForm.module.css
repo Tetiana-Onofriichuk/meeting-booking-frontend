@@ -1,7 +1,17 @@
+.formWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+}
 .form {
   display: grid;
-  gap: 12px;
+  gap: 16px;
+  width: 100%;
   max-width: 520px;
+  padding: 24px;
+  background: var(--color-neutral);
+  border-radius: 20px;
 }
 
 .field {
@@ -12,23 +22,27 @@
 .label {
   font-size: 14px;
   font-weight: 500;
-  color: #111;
+  color: var(--color-neutral-darkest);
 }
 
 .input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  padding: 0 12px;
   outline: none;
+  color: var(--color-neutral-dark);
 }
 
 .input:focus {
-  border-color: #111;
+  border-color: var(--color-neutral-darker);
 }
 
 .textarea {
   resize: none;
+  background-color: var(--color-neutral-lighter);
+  justify-content: center;
+  padding: 6px 12px;
 }
 
 .error {
@@ -61,4 +75,15 @@
 
 .submit:hover {
   opacity: 0.9;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.subField {
+  display: grid;
+  gap: 6px;
 }
