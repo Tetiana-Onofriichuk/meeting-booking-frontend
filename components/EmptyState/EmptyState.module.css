@@ -1,32 +1,16 @@
 .wrapper {
-  padding: 48px 24px;
-  text-align: center;
-  border: 1px dashed var(--color-border, #ddd);
-  border-radius: 12px;
+  padding: 48px 0;
+  max-width: 520px;
 }
 
 .title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 
 .description {
-  font-size: 15px;
-  color: #666;
-  margin-bottom: 24px;
-}
-
-.button {
-  display: inline-block;
-  padding: 10px 18px;
-  border-radius: 8px;
-  background: #111;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.button:hover {
-  opacity: 0.9;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.8;
 }

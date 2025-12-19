@@ -1,0 +1,22 @@
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  border: 1px solid transparent;
+}
+
+.active {
+  background-color: var(--color-deco);
+  color: var(--color-neutral-darker);
+  border-color: var(--color-accent-border, #b7e0c2);
+}
+
+.canceled {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: rgba(0, 0, 0, 0.55);
+  border-color: rgba(0, 0, 0, 0.12);
+}

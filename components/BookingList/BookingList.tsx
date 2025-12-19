@@ -1,41 +1,46 @@
 "use client";
 
-import { useEffect } from "react";
-import { useBookingStore } from "@/store/bookingStore";
-import EmptyState from "@/components/EmptyState/EmptyState";
-import styles from "./BookingList.module.css";
+import type { Booking } from "@/types/booking";
 import BookingCard from "@/components/BookingCard/BookingCard";
+import css from "./BookingList.module.css";
 
 type Props = {
-  clientId?: string;
-  businessId?: string;
+  bookings: Booking[];
+  view: "client" | "business";
+  isLoading: boolean;
+  error: string | null;
+  onCancel: (id: string) => Promise<boolean>;
 };
 
-export default function BookingList({ clientId, businessId }: Props) {
-  const { bookings, isLoading, error, fetchBookings } = useBookingStore();
-
-  useEffect(() => {
-    fetchBookings({ clientId, businessId });
-  }, [clientId, businessId, fetchBookings]);
-
+export default function BookingList({
+  bookings,
+  view,
+  isLoading,
+  error,
+  onCancel,
+}: Props) {
   if (isLoading) {
-    return <p className={styles.state}>Loading bookings…</p>;
+    return <p className={css.message}>Loading...</p>;
   }
 
   if (error) {
-    return <p className={styles.error}>{error}</p>;
+    return <p className={css.error}>{error}</p>;
   }
 
   if (bookings.length === 0) {
-    return <EmptyState />;
+    return <p className={css.message}>No bookings yet.</p>;
   }
 
   return (
-    <ul className={styles.list}>
+    <ul className={css.list}>
       {bookings.map((booking) => (
-        <li key={booking._id} className={styles.item}>
-          <BookingCard booking={booking} />
-        </li>
+        <BookingCard
+          key={booking._id}
+          booking={booking}
+          view={view}
+          onCancel={onCancel}
+          isLoading={isLoading}
+        />
       ))}
     </ul>
   );
