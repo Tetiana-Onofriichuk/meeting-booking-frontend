@@ -5,11 +5,6 @@
 }
 
 :root {
-  --container-max-width: 1200px;
-  --container-padding: 16px;
-}
-
-:root {
   --color-neutral-darkest: #000;
   --color-white: #fff;
 
@@ -159,10 +154,7 @@ ol {
 }
 
 .container {
-  max-width: var(--container-max-width);
-  padding-left: var(--container-padding);
-  padding-right: var(--container-padding);
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  max-width: 1440px;
+  padding: 0 64px;
+  margin: 0 auto;
 }
