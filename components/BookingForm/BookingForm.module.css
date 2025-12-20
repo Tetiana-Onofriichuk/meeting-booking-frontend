@@ -17,6 +17,7 @@
 .field {
   display: grid;
   gap: 6px;
+  position: relative;
 }
 
 .label {
@@ -40,9 +41,12 @@
 
 .textarea {
   resize: none;
-  background-color: var(--color-neutral-lighter);
+  background: var(--color-neutral);
   justify-content: center;
   padding: 6px 12px;
+}
+.textarea:focus {
+  border-color: var(--color-deco-light);
 }
 
 .error {
@@ -86,4 +90,31 @@
 .subField {
   display: grid;
   gap: 6px;
+}
+
+.input,
+.textarea {
+  color: var(--color-neutral-darkest);
+  caret-color: var(--color-deco-light);
+}
+
+.textarea {
+  position: relative;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: text;
+  z-index: 1;
+  padding: 8px 14px;
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-neutral-darkest);
+  opacity: 0.8;
+  justify-content: center;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
 }

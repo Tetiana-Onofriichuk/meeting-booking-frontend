@@ -1,7 +1,6 @@
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 
   width: 100%;
   max-width: 720px;
@@ -15,6 +14,11 @@
   color: var(--color-neutral-darker);
 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
 
 .topRow,
@@ -74,28 +78,33 @@
 }
 
 .actions {
-  display: flex;
-  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 16px;
 
-  margin-left: auto;
-  padding-left: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.editBtn,
+.cancelBtn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
 }
 
 .cancelBtn {
-  align-self: flex-start;
-
-  padding: 8px 14px;
-  border-radius: 999px;
-
   background: transparent;
   border: 1px solid rgba(0, 0, 0, 0.25);
-
-  font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
 }
 
 .cancelBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.editBtn {
+  justify-self: start;
 }

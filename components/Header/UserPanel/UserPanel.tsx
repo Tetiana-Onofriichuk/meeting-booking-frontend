@@ -3,13 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import css from "./UserPanel.module.css";
+
 import { useUserStore } from "@/store/userStore";
-import CreateUserModal from "@/components/Modals/CreateUserModal";
-import SelectUserModal from "@/components/Modals/SelectUserModal";
 import Button from "@/components/Button/Button";
+import Modal from "@/components/Modals/Modal";
+
+import SelectUserModal from "@/components/Modals/SelectUserModal";
+import CreateUserModal from "@/components/Modals/CreateUserModal";
 
 export default function UserPanel() {
   const { activeUser, logout } = useUserStore();
+
   const [openCreate, setOpenCreate] = useState(false);
   const [openSelect, setOpenSelect] = useState(false);
 
@@ -39,17 +43,33 @@ export default function UserPanel() {
         </Button>
       </div>
 
-      <SelectUserModal
-        open={openSelect}
+      <Modal
+        isOpen={openSelect}
         onClose={() => setOpenSelect(false)}
-        onOpenCreate={() => setOpenCreate(true)}
-      />
+        title="Log in"
+      >
+        <SelectUserModal
+          onClose={() => setOpenSelect(false)}
+          onOpenCreate={() => {
+            setOpenSelect(false);
+            setOpenCreate(true);
+          }}
+        />
+      </Modal>
 
-      <CreateUserModal
-        open={openCreate}
+      <Modal
+        isOpen={openCreate}
         onClose={() => setOpenCreate(false)}
-        onOpenSelect={() => setOpenSelect(true)}
-      />
+        title="Sign up"
+      >
+        <CreateUserModal
+          onClose={() => setOpenCreate(false)}
+          onOpenSelect={() => {
+            setOpenCreate(false);
+            setOpenSelect(true);
+          }}
+        />
+      </Modal>
     </>
   );
 }

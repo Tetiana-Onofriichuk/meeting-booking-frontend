@@ -15,16 +15,11 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ];
 
 type Props = {
-  open: boolean;
   onClose: () => void;
   onOpenSelect?: () => void;
 };
 
-export default function CreateUserModal({
-  open,
-  onClose,
-  onOpenSelect,
-}: Props) {
+export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
   const createUser = useUserStore((s) => s.createUser);
   const isLoading = useUserStore((s) => s.isLoading);
   const apiError = useUserStore((s) => s.error);
@@ -36,31 +31,10 @@ export default function CreateUserModal({
   // помилка саме форми (валідація) — показуємо тільки після submit
   const [formError, setFormError] = useState<string>("");
 
-  // ESC close
-  useEffect(() => {
-    if (!open) return;
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
-    };
-
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
-
-  // reset only local error on open
-  useEffect(() => {
-    if (!open) return;
-    setFormError("");
-  }, [open]);
-
   const canSubmit = useMemo(() => {
     if (isLoading) return false;
     return name.trim().length > 0 && email.trim().length > 0;
   }, [name, email, isLoading]);
-
-  if (!open) return null;
 
   const resetForm = () => {
     setName("");
@@ -73,6 +47,11 @@ export default function CreateUserModal({
     resetForm();
     onClose();
   };
+
+  // Коли компонент змонтувався (тобто модалка відкрилась) — скидаємо formError
+  useEffect(() => {
+    setFormError("");
+  }, []);
 
   const submit = async () => {
     setFormError("");
@@ -96,88 +75,82 @@ export default function CreateUserModal({
   };
 
   return (
-    <div className={css.backdrop} onMouseDown={handleClose} role="presentation">
-      <div
-        className={css.modal}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Create user"
-        onMouseDown={(e) => e.stopPropagation()}
+    <>
+      {formError ? <div className={css.errorBox}>{formError}</div> : null}
+
+      {!formError && apiError ? (
+        <div className={css.errorBox}>{apiError}</div>
+      ) : null}
+
+      <form
+        className={css.body}
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
       >
-        <div className={css.head}>
-          <h3 className={css.title}>Sign up</h3>
-          <Button variant="icon" onClick={handleClose} aria-label="Close">
-            ✕
-          </Button>
-        </div>
-
-        {/* Form validation error (priority) */}
-        {formError ? <div className={css.errorBox}>{formError}</div> : null}
-
-        {/* API error */}
-        {!formError && apiError ? (
-          <div className={css.errorBox}>{apiError}</div>
-        ) : null}
-
-        <form
-          className={css.body}
-          onSubmit={(e) => {
-            e.preventDefault();
-            submit();
-          }}
-        >
-          <label className={css.field}>
-            <span className={css.label}>Name (max 8 chars)</span>
-            <input
-              className={css.input}
-              value={name}
-              onChange={(e) => setName(e.target.value)} // ✅ НЕ обрізаємо
-              placeholder="e.g. Tetiana"
-              autoFocus
-              disabled={isLoading}
-            />
-          </label>
-
-          <label className={css.field}>
-            <span className={css.label}>Email</span>
-            <input
-              className={css.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="mail@example.com"
-              disabled={isLoading}
-              inputMode="email"
-              autoComplete="email"
-            />
-          </label>
-
-          <Dropdown
-            label="Role"
-            value={role}
-            options={ROLE_OPTIONS}
+        <label className={css.field}>
+          <span className={css.label}>Name (max 8 chars)</span>
+          <input
+            className={css.input}
+            value={name}
+            onChange={(e) => setName(e.target.value)} // ✅ НЕ обрізаємо
+            placeholder="e.g. Tetiana"
+            autoFocus
             disabled={isLoading}
-            onChange={(v) => setRole(v as Role)}
           />
+        </label>
 
+        <label className={css.field}>
+          <span className={css.label}>Email</span>
+          <input
+            className={css.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="mail@example.com"
+            disabled={isLoading}
+            inputMode="email"
+            autoComplete="email"
+          />
+        </label>
+
+        <Dropdown
+          label="Role"
+          value={role}
+          options={ROLE_OPTIONS}
+          disabled={isLoading}
+          onChange={(v) => setRole(v as Role)}
+        />
+
+        <div className={css.actions}>
           <Button type="submit" variant="primary" disabled={!canSubmit}>
             {isLoading ? "Creating…" : "Create"}
           </Button>
 
-          {onOpenSelect && (
-            <div className={css.footer}>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  handleClose();
-                  onOpenSelect?.();
-                }}
-              >
-                Log in
-              </Button>
-            </div>
-          )}
-        </form>
-      </div>
-    </div>
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+        </div>
+
+        {onOpenSelect && (
+          <div className={css.footer}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleClose();
+                onOpenSelect();
+              }}
+              disabled={isLoading}
+            >
+              Log in
+            </Button>
+          </div>
+        )}
+      </form>
+    </>
   );
 }

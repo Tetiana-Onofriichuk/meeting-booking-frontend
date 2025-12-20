@@ -10,6 +10,7 @@ type Props = {
   booking: Booking;
   view: "client" | "business";
   onCancel?: (id: string) => void;
+  onEdit?: (booking: Booking) => void;
   isLoading?: boolean;
 };
 
@@ -17,12 +18,13 @@ export default function BookingCard({
   booking,
   view,
   onCancel,
+  onEdit,
   isLoading = false,
 }: Props) {
   const isClientView = view === "client";
   const otherUser = isClientView ? booking.businessId : booking.clientId;
 
-  const canCancel = booking.status === "active";
+  const isActive = booking.status === "active";
 
   return (
     <li className={css.card}>
@@ -43,10 +45,20 @@ export default function BookingCard({
           {new Date(booking.endAt).toLocaleString()}
         </div>
 
-        {booking.notes && <p className={css.notes}>{booking.notes}</p>}
+        {booking.notes ? <p className={css.notes}>{booking.notes}</p> : null}
       </div>
-      {canCancel && (
+
+      {isActive ? (
         <div className={css.actions}>
+          <Button
+            variant="secondary"
+            onClick={() => onEdit?.(booking)}
+            disabled={isLoading}
+            className={css.editBtn}
+          >
+            Edit booking
+          </Button>
+
           <Button
             variant="secondary"
             onClick={() => onCancel?.(booking._id)}
@@ -56,7 +68,7 @@ export default function BookingCard({
             Cancel booking
           </Button>
         </div>
-      )}
+      ) : null}
     </li>
   );
 }

@@ -2,21 +2,23 @@
 
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
+import css from "./BookingForm.module.css";
+
+import type { Booking } from "@/types/booking";
 import { useBookingStore } from "@/store/bookingStore";
 import { useUserStore } from "@/store/userStore";
-import css from "./BookingForm.module.css";
+
 import Button from "@/components/Button/Button";
 import Dropdown, { DropdownOption } from "@/components/Dropdown/Dropdown";
 import DateDropdown from "@/components/DateDropdown/DateDropdown";
 
-// ✅ ПІДСТАВ СВІЙ РЕАЛЬНИЙ ШЛЯХ
 import { buildTimeOptions } from "@/utils/time";
 
 type FormValues = {
   businessId: string;
 
-  startDate: string; // YYYY-MM-DD
-  startTime: string; // HH:mm
+  startDate: string;
+  startTime: string;
   endDate: string;
   endTime: string;
 
@@ -27,6 +29,14 @@ type BusinessOption = { id: string; label: string };
 
 type Props = {
   businessOptions: BusinessOption[];
+  mode?: "create" | "edit";
+  booking?: Booking | null;
+
+  /** Викликаємо після успішного create/update (для закриття модалки, тощо) */
+  onSuccess?: () => void;
+
+  /** Кнопка Cancel (зазвичай = onClose з модалки) */
+  onCancel?: () => void;
 };
 
 function toIso(date: string, time: string) {
@@ -37,10 +47,35 @@ function toMs(date: string, time: string) {
   return new Date(`${date}T${time}`).getTime();
 }
 
-export default function BookingForm({ businessOptions }: Props) {
+function toDateInputValue(iso: string): string {
+  const d = new Date(iso);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function toTimeValue(iso: string): string {
+  const d = new Date(iso);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
+export default function BookingForm({
+  businessOptions,
+  mode = "create",
+  booking = null,
+  onSuccess,
+  onCancel,
+}: Props) {
   const router = useRouter();
-  const { activeUser } = useUserStore();
-  const { createBooking, isLoading, error } = useBookingStore();
+  const activeUser = useUserStore((s) => s.activeUser);
+
+  const createBooking = useBookingStore((s) => s.createBooking);
+  const updateBooking = useBookingStore((s) => s.updateBooking);
+  const isLoading = useBookingStore((s) => s.isLoading);
+  const error = useBookingStore((s) => s.error);
 
   const businessDropdownOptions: DropdownOption[] = businessOptions.map(
     (b) => ({
@@ -51,14 +86,8 @@ export default function BookingForm({ businessOptions }: Props) {
 
   const timeOptions: DropdownOption[] = buildTimeOptions(30);
 
-  const initialValues: FormValues = {
-    businessId: businessDropdownOptions[0]?.value ?? "",
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
-    notes: "",
-  };
+  const isEdit = mode === "edit";
+  const canEdit = isEdit && Boolean(booking);
 
   if (!activeUser) {
     return <p className={css.info}>Please select an active user first.</p>;
@@ -67,6 +96,29 @@ export default function BookingForm({ businessOptions }: Props) {
   if (activeUser.role !== "client") {
     return <p className={css.info}>Only client users can create bookings.</p>;
   }
+
+  if (isEdit && !booking) {
+    return <p className={css.info}>Booking not found.</p>;
+  }
+
+  const initialValues: FormValues = canEdit
+    ? {
+        businessId:
+          booking!.businessId?._id ?? (booking!.businessId as any) ?? "",
+        startDate: toDateInputValue(booking!.startAt),
+        startTime: toTimeValue(booking!.startAt),
+        endDate: toDateInputValue(booking!.endAt),
+        endTime: toTimeValue(booking!.endAt),
+        notes: booking!.notes ?? "",
+      }
+    : {
+        businessId: businessDropdownOptions[0]?.value ?? "",
+        startDate: "",
+        startTime: "",
+        endDate: "",
+        endTime: "",
+        notes: "",
+      };
 
   return (
     <Formik<FormValues>
@@ -100,17 +152,34 @@ export default function BookingForm({ businessOptions }: Props) {
         return errors;
       }}
       onSubmit={async (values, { setSubmitting }) => {
-        const created = await createBooking({
-          clientId: activeUser._id,
-          businessId: values.businessId,
+        const payload = {
           startAt: toIso(values.startDate, values.startTime),
           endAt: toIso(values.endDate, values.endTime),
           notes: values.notes.trim() || undefined,
-        });
+        };
+
+        let ok = false;
+
+        if (mode === "create") {
+          const created = await createBooking({
+            clientId: activeUser._id,
+            businessId: values.businessId,
+            ...payload,
+          });
+          ok = Boolean(created);
+        } else if (mode === "edit" && booking) {
+          const updated = await updateBooking(booking._id, payload);
+          ok = Boolean(updated);
+        }
 
         setSubmitting(false);
 
-        if (created) router.push("/dashboard");
+        if (ok) {
+          onSuccess?.();
+
+          // у create режимі логічно перейти на дашборд після створення
+          if (mode === "create") router.push("/dashboard");
+        }
       }}
     >
       {({
@@ -132,13 +201,20 @@ export default function BookingForm({ businessOptions }: Props) {
                 disabled={
                   isLoading ||
                   isSubmitting ||
-                  businessDropdownOptions.length === 0
+                  businessDropdownOptions.length === 0 ||
+                  isEdit
                 }
                 onChange={(v) => {
                   setFieldValue("businessId", v);
                   setFieldTouched("businessId", true, false);
                 }}
               />
+              {isEdit ? (
+                <p className={css.hint}>
+                  Business cannot be changed in edit mode.
+                </p>
+              ) : null}
+
               {touched.businessId && errors.businessId && (
                 <p className={css.error}>{errors.businessId}</p>
               )}
@@ -233,18 +309,37 @@ export default function BookingForm({ businessOptions }: Props) {
                 rows={4}
                 placeholder="Optional"
                 className={`${css.input} ${css.textarea}`}
+                disabled={isLoading || isSubmitting}
               />
             </div>
 
-            {error && <p className={css.error}>{error}</p>}
+            {error ? <p className={css.error}>{error}</p> : null}
 
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={isSubmitting || isLoading}
-            >
-              {isSubmitting || isLoading ? "Creating…" : "Create booking"}
-            </Button>
+            <div className={css.actions}>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isSubmitting || isLoading}
+              >
+                {isSubmitting || isLoading
+                  ? isEdit
+                    ? "Saving…"
+                    : "Creating…"
+                  : isEdit
+                    ? "Save changes"
+                    : "Create booking"}
+              </Button>
+
+              {onCancel ? (
+                <Button
+                  variant="secondary"
+                  onClick={onCancel}
+                  disabled={isSubmitting || isLoading}
+                >
+                  Cancel
+                </Button>
+              ) : null}
+            </div>
           </Form>
         </div>
       )}
