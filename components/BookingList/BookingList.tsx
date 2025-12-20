@@ -10,6 +10,7 @@ type Props = {
   isLoading: boolean;
   error: string | null;
   onCancel: (id: string) => Promise<boolean>;
+  onEdit?: (booking: Booking) => void;
 };
 
 export default function BookingList({
@@ -18,6 +19,7 @@ export default function BookingList({
   isLoading,
   error,
   onCancel,
+  onEdit,
 }: Props) {
   if (isLoading) {
     return <p className={css.message}>Loading...</p>;
@@ -39,6 +41,7 @@ export default function BookingList({
           booking={booking}
           view={view}
           onCancel={onCancel}
+          onEdit={onEdit}
           isLoading={isLoading}
         />
       ))}
