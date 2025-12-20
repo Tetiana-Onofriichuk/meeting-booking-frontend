@@ -90,7 +90,6 @@
   height: 40px;
   padding: 0 12px;
   border-radius: 12px;
-  border: 1px solid var(--color-neutral-dark);
   background: var(--color-neutral);
   color: var(--color-neutral-darker);
   outline: none;
@@ -99,10 +98,14 @@
     box-shadow 120ms ease,
     opacity 120ms ease;
 }
+.input::placeholder {
+  color: var(--color-neutral-darker);
+  opacity: 1;
+}
 
 .input:focus {
-  border-color: var(--color-deco);
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 .input:disabled {
