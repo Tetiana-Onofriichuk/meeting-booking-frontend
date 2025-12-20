@@ -6,6 +6,7 @@ import css from "./ProfilePage.module.css";
 import EmptyState from "@/components/EmptyState/EmptyState";
 import Button from "@/components/Button/Button";
 import { useUserStore } from "@/store/userStore";
+import { validateUserForm } from "@/lib/userValidators";
 
 type FormState = {
   name: string;
@@ -16,9 +17,8 @@ export default function ProfilePage() {
   const activeUser = useUserStore((s) => s.activeUser);
   const logout = useUserStore((s) => s.logout);
   const updateUser = useUserStore((s) => s.updateUser);
-
-  const storeError = useUserStore((s) => s.error);
   const storeLoading = useUserStore((s) => s.isLoading);
+  const storeError = useUserStore((s) => s.error);
 
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [form, setForm] = useState<FormState>({ name: "", email: "" });
@@ -66,15 +66,16 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setLocalError("");
 
-    const name = form.name.trim();
-    const email = form.email.trim();
-
-    if (!name || !email) {
-      setLocalError("Name and email are required.");
+    const err = validateUserForm(form);
+    if (err) {
+      setLocalError(err);
       return;
     }
 
-    const updated = await updateUser(activeUser._id, { name, email });
+    const updated = await updateUser(activeUser._id, {
+      name: form.name.trim(),
+      email: form.email.trim(),
+    });
 
     if (!updated) {
       setLocalError(storeError || "Failed to update profile.");
@@ -136,11 +137,12 @@ export default function ProfilePage() {
                 }}
               >
                 <label className={css.field}>
-                  <span className={css.fieldLabel}>Name</span>
+                  <span className={css.fieldLabel}>Name (max 8 chars)</span>
                   <input
                     className={css.input}
                     value={form.name}
                     onChange={handleChange("name")}
+                    placeholder="e.g. Tetiana"
                     autoComplete="name"
                     disabled={storeLoading}
                   />
@@ -152,7 +154,9 @@ export default function ProfilePage() {
                     className={css.input}
                     value={form.email}
                     onChange={handleChange("email")}
+                    placeholder="mail@example.com"
                     autoComplete="email"
+                    inputMode="email"
                     disabled={storeLoading}
                   />
                 </label>
