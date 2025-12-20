@@ -5,6 +5,8 @@ import css from "./ProfilePage.module.css";
 
 import EmptyState from "@/components/EmptyState/EmptyState";
 import Button from "@/components/Button/Button";
+import ConfirmDeleteUserModal from "@/components/ConfirmDeleteUserModal/ConfirmDeleteUserModal";
+
 import { useUserStore } from "@/store/userStore";
 import { validateUserForm } from "@/lib/userValidators";
 
@@ -15,14 +17,20 @@ type FormState = {
 
 export default function ProfilePage() {
   const activeUser = useUserStore((s) => s.activeUser);
+
   const logout = useUserStore((s) => s.logout);
   const updateUser = useUserStore((s) => s.updateUser);
-  const storeLoading = useUserStore((s) => s.isLoading);
+  const deleteUser = useUserStore((s) => s.deleteUser);
+
+  const isLoading = useUserStore((s) => s.isLoading);
   const storeError = useUserStore((s) => s.error);
 
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [form, setForm] = useState<FormState>({ name: "", email: "" });
-  const [localError, setLocalError] = useState<string>("");
+
+  const [saveError, setSaveError] = useState<string>("");
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState<string>("");
 
   useEffect(() => {
     if (!activeUser) return;
@@ -33,7 +41,9 @@ export default function ProfilePage() {
     });
 
     setMode("view");
-    setLocalError("");
+    setSaveError("");
+    setDeleteError("");
+    setIsDeleteOpen(false);
   }, [activeUser]);
 
   if (!activeUser) {
@@ -54,21 +64,21 @@ export default function ProfilePage() {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
-  const handleCancel = () => {
+  const handleCancelEdit = () => {
     setForm({
       name: activeUser.name ?? "",
       email: activeUser.email ?? "",
     });
-    setLocalError("");
+    setSaveError("");
     setMode("view");
   };
 
   const handleSave = async () => {
-    setLocalError("");
+    setSaveError("");
 
     const err = validateUserForm(form);
     if (err) {
-      setLocalError(err);
+      setSaveError(err);
       return;
     }
 
@@ -78,11 +88,35 @@ export default function ProfilePage() {
     });
 
     if (!updated) {
-      setLocalError(storeError || "Failed to update profile.");
+      setSaveError(storeError || "Failed to update profile.");
       return;
     }
 
     setMode("view");
+  };
+
+  const openDelete = () => {
+    setDeleteError("");
+    setIsDeleteOpen(true);
+  };
+
+  const closeDelete = () => {
+    if (isLoading) return;
+    setDeleteError("");
+    setIsDeleteOpen(false);
+  };
+
+  const confirmDelete = async () => {
+    setDeleteError("");
+
+    const success = await deleteUser(activeUser._id);
+
+    if (!success) {
+      setDeleteError(storeError || "Failed to delete user.");
+      return;
+    }
+
+    setIsDeleteOpen(false);
   };
 
   return (
@@ -121,8 +155,25 @@ export default function ProfilePage() {
                 </Button>
               </div>
 
+              <div className={css.delete}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className={css.deleteBtn}
+                  onClick={openDelete}
+                  disabled={isLoading}
+                >
+                  Delete user
+                </Button>
+              </div>
+
               <div className={css.logout}>
-                <Button type="button" variant="secondary" onClick={logout}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={logout}
+                  disabled={isLoading}
+                >
                   Logout
                 </Button>
               </div>
@@ -144,7 +195,7 @@ export default function ProfilePage() {
                     onChange={handleChange("name")}
                     placeholder="e.g. Tetiana"
                     autoComplete="name"
-                    disabled={storeLoading}
+                    disabled={isLoading}
                   />
                 </label>
 
@@ -157,39 +208,61 @@ export default function ProfilePage() {
                     placeholder="mail@example.com"
                     autoComplete="email"
                     inputMode="email"
-                    disabled={storeLoading}
+                    disabled={isLoading}
                   />
                 </label>
 
                 <div className={css.editActions}>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    disabled={storeLoading}
-                  >
-                    {storeLoading ? "Saving..." : "Save"}
+                  <Button type="submit" variant="primary" disabled={isLoading}>
+                    {isLoading ? "Saving..." : "Save"}
                   </Button>
 
                   <Button
                     type="button"
                     variant="secondary"
-                    onClick={handleCancel}
-                    disabled={storeLoading}
+                    onClick={handleCancelEdit}
+                    disabled={isLoading}
                   >
                     Cancel
                   </Button>
                 </div>
 
-                {localError ? <p className={css.error}>{localError}</p> : null}
+                {saveError ? <p className={css.error}>{saveError}</p> : null}
               </form>
 
+              <div className={css.delete}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className={css.deleteBtn}
+                  onClick={openDelete}
+                  disabled={isLoading}
+                >
+                  Delete user
+                </Button>
+              </div>
+
               <div className={css.logout}>
-                <Button type="button" variant="secondary" onClick={logout}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={logout}
+                  disabled={isLoading}
+                >
                   Logout
                 </Button>
               </div>
             </>
           )}
+
+          <ConfirmDeleteUserModal
+            open={isDeleteOpen}
+            userName={activeUser.name}
+            isLoading={isLoading}
+            error={deleteError}
+            onClose={closeDelete}
+            onConfirm={confirmDelete}
+          />
         </div>
       </div>
     </section>
