@@ -132,3 +132,19 @@
   right: 20px;
   bottom: 20px;
 }
+
+.delete {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+
+.deleteBtn {
+  border: 1px solid var(--color-danger, #c0392b);
+  color: var(--color-danger, #c0392b);
+  background: transparent;
+}
+
+.deleteBtn:hover {
+  background: rgba(192, 57, 43, 0.08);
+}
