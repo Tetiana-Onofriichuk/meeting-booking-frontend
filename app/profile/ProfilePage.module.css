@@ -1,0 +1,130 @@
+.section {
+  padding: 32px 0 48px;
+}
+
+.card {
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 22px 20px 64px;
+  border-radius: 16px;
+  background: var(--color-neutral);
+  box-shadow: 0 6px 18px var(--color-neutral);
+}
+
+.title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.subtitle {
+  margin: 6px 0 18px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: var(--color-neutral);
+  border: 1px solid var(--color-neutral-dark);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-neutral-darker);
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-neutral-darker);
+  text-align: right;
+  word-break: break-word;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 13px;
+  color: var(--color-neutral-darker);
+}
+
+.input {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-neutral-dark);
+  background: var(--color-neutral);
+  color: var(--color-neutral-darker);
+  outline: none;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.input:focus {
+  border-color: var(--color-deco);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.editActions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.error {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--color-danger);
+}
+
+.logout {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
