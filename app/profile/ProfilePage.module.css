@@ -92,6 +92,7 @@
   border-radius: 12px;
   background: var(--color-neutral);
   color: var(--color-neutral-darker);
+  border: 1px solid var(--color-border);
   outline: none;
   transition:
     border-color 120ms ease,
@@ -105,7 +106,7 @@
 
 .input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-soft);
+  cursor: pointer;
 }
 
 .input:disabled {
