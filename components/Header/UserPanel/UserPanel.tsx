@@ -16,12 +16,12 @@ export default function UserPanel() {
   if (activeUser) {
     return (
       <div className={css.wrap}>
-        <Link href="/dashboard" className={css.link}>
-          <Button variant="secondary">Кабінет</Button>
+        <Link href="/profile" className={css.link}>
+          <Button variant="secondary">Profile</Button>
         </Link>
 
         <Button variant="secondary" onClick={logout}>
-          Вийти
+          Logout
         </Button>
       </div>
     );
