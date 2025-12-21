@@ -41,3 +41,10 @@
   border: 1px dashed var(--color-border, rgba(0, 0, 0, 0.18));
   background: rgba(0, 0, 0, 0.02);
 }
+
+.loader {
+  min-height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

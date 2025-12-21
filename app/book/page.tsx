@@ -10,10 +10,11 @@ import { useUserStore } from "@/store/userStore";
 import { getBusinesses } from "@/lib/apiClient";
 import type { User } from "@/types/user";
 
+import { ClipLoader } from "react-spinners";
+
 type BusinessOption = { id: string; label: string };
 
 export default function BookPage() {
-  // ✅ Hooks завжди на верхньому рівні
   const { activeUser } = useUserStore();
 
   const [businesses, setBusinesses] = useState<User[]>([]);
@@ -23,7 +24,6 @@ export default function BookPage() {
   const canCreate = Boolean(activeUser) && activeUser?.role === "client";
 
   useEffect(() => {
-    // ✅ ефект теж викликається завжди, але всередині є guard
     if (!canCreate) return;
 
     let mounted = true;
@@ -54,7 +54,6 @@ export default function BookPage() {
     };
   }, [canCreate]);
 
-  // ✅ Тепер guards — після хуків
   if (!activeUser) {
     return (
       <section className={css.page}>
@@ -109,16 +108,23 @@ export default function BookPage() {
       </div>
 
       <div className={css.card}>
-        {isLoading && <p className={css.text}>Loading businesses…</p>}
-        {loadError && <p className={css.error}>{loadError}</p>}
+        {isLoading ? (
+          <div className={css.loader} aria-label="Loading businesses">
+            <ClipLoader size={42} color="var(--color-deco)" />
+          </div>
+        ) : null}
 
-        {!isLoading && !loadError && businesses.length === 0 && (
+        {!isLoading && loadError ? (
+          <p className={css.error}>{loadError}</p>
+        ) : null}
+
+        {!isLoading && !loadError && businesses.length === 0 ? (
           <p className={css.text}>No businesses available.</p>
-        )}
+        ) : null}
 
-        {!isLoading && !loadError && businesses.length > 0 && (
+        {!isLoading && !loadError && businesses.length > 0 ? (
           <BookingForm businessOptions={businessOptions} />
-        )}
+        ) : null}
       </div>
     </section>
   );

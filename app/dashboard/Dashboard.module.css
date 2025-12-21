@@ -16,3 +16,9 @@
   margin: 0;
   opacity: 0.75;
 }
+.loader {
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
