@@ -5,6 +5,7 @@ import {
   createBooking as apiCreateBooking,
   updateBooking as apiUpdateBooking,
   cancelBooking as apiCancelBooking,
+  deleteBooking as apiDeleteBooking,
 } from "@/lib/apiClient";
 
 type BookingFetchParams = {
@@ -42,8 +43,16 @@ type BookingState = {
 
   cancelBooking: (id: string) => Promise<boolean>;
 
+  deleteBooking: (id: string) => Promise<boolean>;
+
   clear: () => void;
 };
+
+function sortByStartAtAsc(items: Booking[]): Booking[] {
+  return [...items].sort(
+    (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
+  );
+}
 
 export const useBookingStore = create<BookingState>((set, get) => ({
   bookings: [],
@@ -69,12 +78,8 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     try {
       const booking = await apiCreateBooking(data);
 
-      // Бекенд сортує по startAt ASC -> підтримуємо такий самий порядок
       set((state) => ({
-        bookings: [...state.bookings, booking].sort(
-          (a, b) =>
-            new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
-        ),
+        bookings: sortByStartAtAsc([...state.bookings, booking]),
       }));
 
       return booking;
@@ -94,12 +99,9 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       const updated = await apiUpdateBooking(id, data);
 
       set((state) => ({
-        bookings: state.bookings
-          .map((b) => (b._id === id ? updated : b))
-          .sort(
-            (a, b) =>
-              new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
-          ),
+        bookings: sortByStartAtAsc(
+          state.bookings.map((b) => (b._id === id ? updated : b))
+        ),
       }));
 
       return updated;
@@ -116,18 +118,36 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   cancelBooking: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      await apiCancelBooking(id);
+      const canceled = await apiCancelBooking(id);
 
       set((state) => ({
-        bookings: state.bookings.map((b) =>
-          b._id === id ? { ...b, status: "canceled" } : b
-        ),
+        bookings: state.bookings.map((b) => (b._id === id ? canceled : b)),
       }));
 
       return true;
     } catch (e) {
       const message =
         e instanceof Error ? e.message : "Failed to cancel booking";
+      set({ error: message });
+      return false;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteBooking: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await apiDeleteBooking(id);
+
+      set((state) => ({
+        bookings: state.bookings.filter((b) => b._id !== id),
+      }));
+
+      return true;
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "Failed to delete booking";
       set({ error: message });
       return false;
     } finally {

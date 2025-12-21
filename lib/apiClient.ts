@@ -60,6 +60,10 @@ async function request<T>(
     throw new Error(message);
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   const text = await response.text();
   if (!text) return undefined as T;
 
@@ -107,18 +111,18 @@ export async function updateBooking(
   });
 }
 
-export async function cancelBooking(id: string) {
-  const res = await fetch(`${API_BASE_URL}/bookings/${id}`, {
+export async function cancelBooking(id: string): Promise<Booking> {
+  return request<Booking>(`/bookings/${id}/cancel`, {
+    method: "PATCH",
+  });
+}
+
+export async function deleteBooking(id: string): Promise<void> {
+  await request<void>(`/bookings/${id}`, {
     method: "DELETE",
   });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(text || "Failed to cancel booking");
-  }
-
-  return true;
 }
+
 export async function getUsers(params?: {
   role?: "client" | "business";
 }): Promise<User[]> {

@@ -121,7 +121,12 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
         />
 
         <div className={css.actions}>
-          <Button type="submit" variant="primary" disabled={!canSubmit}>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={!canSubmit}
+            className={css.btnCreate}
+          >
             {isLoading ? "Creating…" : "Create"}
           </Button>
 

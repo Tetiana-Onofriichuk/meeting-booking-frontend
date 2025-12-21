@@ -23,8 +23,10 @@ export default function DashboardPage() {
   const bookings = useBookingStore((s) => s.bookings);
   const isLoading = useBookingStore((s) => s.isLoading);
   const error = useBookingStore((s) => s.error);
+
   const fetchBookings = useBookingStore((s) => s.fetchBookings);
   const cancelBooking = useBookingStore((s) => s.cancelBooking);
+  const deleteBooking = useBookingStore((s) => s.deleteBooking);
 
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
@@ -58,24 +60,30 @@ export default function DashboardPage() {
   const closeEdit = async () => {
     setEditingBooking(null);
 
-    if (!activeUser) return;
-
-    if (activeUser.role === "client") {
-      await fetchBookings({ clientId: activeUser._id });
-    } else {
-      await fetchBookings({ businessId: activeUser._id });
-    }
+    if (!fetchParams) return;
+    await fetchBookings(fetchParams);
   };
 
   const handleCancel = async (id: string) => {
     const ok = await cancelBooking(id);
 
     if (editingBooking?._id === id) {
-      closeEdit();
+      await closeEdit();
+      return ok;
     }
 
     if (ok && fetchParams) {
       await fetchBookings(fetchParams);
+    }
+
+    return ok;
+  };
+
+  const handleDelete = async (id: string) => {
+    const ok = await deleteBooking(id);
+
+    if (editingBooking?._id === id) {
+      setEditingBooking(null);
     }
 
     return ok;
@@ -108,6 +116,7 @@ export default function DashboardPage() {
           isLoading={isLoading}
           error={error}
           onCancel={handleCancel}
+          onDelete={handleDelete}
           onEdit={(b) => setEditingBooking(b)}
         />
       </div>
