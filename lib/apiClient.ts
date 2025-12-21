@@ -107,12 +107,18 @@ export async function updateBooking(
   });
 }
 
-export async function cancelBooking(id: string): Promise<{ message: string }> {
-  return request<{ message: string }>(`/bookings/${id}/cancel`, {
-    method: "PATCH",
+export async function cancelBooking(id: string) {
+  const res = await fetch(`${API_BASE_URL}/bookings/${id}`, {
+    method: "DELETE",
   });
-}
 
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Failed to cancel booking");
+  }
+
+  return true;
+}
 export async function getUsers(params?: {
   role?: "client" | "business";
 }): Promise<User[]> {

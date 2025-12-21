@@ -28,7 +28,6 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<Role>("client");
 
-  // помилка саме форми (валідація) — показуємо тільки після submit
   const [formError, setFormError] = useState<string>("");
 
   const canSubmit = useMemo(() => {
@@ -48,7 +47,6 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
     onClose();
   };
 
-  // Коли компонент змонтувався (тобто модалка відкрилась) — скидаємо formError
   useEffect(() => {
     setFormError("");
   }, []);
@@ -94,7 +92,7 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
           <input
             className={css.input}
             value={name}
-            onChange={(e) => setName(e.target.value)} // ✅ НЕ обрізаємо
+            onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Tetiana"
             autoFocus
             disabled={isLoading}

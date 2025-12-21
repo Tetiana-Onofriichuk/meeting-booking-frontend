@@ -177,7 +177,6 @@ export default function BookingForm({
         if (ok) {
           onSuccess?.();
 
-          // у create режимі логічно перейти на дашборд після створення
           if (mode === "create") router.push("/dashboard");
         }
       }}
