@@ -9,7 +9,10 @@ type Props = {
   view: "client" | "business";
   isLoading: boolean;
   error: string | null;
+
   onCancel: (id: string) => Promise<boolean>;
+  onDelete?: (id: string) => Promise<boolean>;
+
   onEdit?: (booking: Booking) => void;
 };
 
@@ -19,6 +22,7 @@ export default function BookingList({
   isLoading,
   error,
   onCancel,
+  onDelete,
   onEdit,
 }: Props) {
   if (isLoading) {
@@ -41,6 +45,7 @@ export default function BookingList({
           booking={booking}
           view={view}
           onCancel={onCancel}
+          onDelete={onDelete}
           onEdit={onEdit}
           isLoading={isLoading}
         />

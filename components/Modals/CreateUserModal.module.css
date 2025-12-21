@@ -75,3 +75,7 @@
   border: 1px solid color-mix(in srgb, var(--color-danger) 40%, transparent);
   background: color-mix(in srgb, var(--color-danger) 10%, var(--color-white));
 }
+
+.btnCreate {
+  margin-right: 12px;
+}

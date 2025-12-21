@@ -9,7 +9,8 @@ import Button from "@/components/Button/Button";
 type Props = {
   booking: Booking;
   view: "client" | "business";
-  onCancel?: (id: string) => void;
+  onCancel?: (id: string) => Promise<boolean>;
+  onDelete?: (id: string) => Promise<boolean>;
   onEdit?: (booking: Booking) => void;
   isLoading?: boolean;
 };
@@ -18,6 +19,7 @@ export default function BookingCard({
   booking,
   view,
   onCancel,
+  onDelete,
   onEdit,
   isLoading = false,
 }: Props) {
@@ -25,6 +27,7 @@ export default function BookingCard({
   const otherUser = isClientView ? booking.businessId : booking.clientId;
 
   const isActive = booking.status === "active";
+  const isCanceled = booking.status === "canceled";
 
   return (
     <li className={css.card}>
@@ -61,11 +64,24 @@ export default function BookingCard({
 
           <Button
             variant="secondary"
-            onClick={() => onCancel?.(booking._id)}
+            onClick={() => void onCancel?.(booking._id)}
             disabled={isLoading}
             className={css.cancelBtn}
           >
             Cancel booking
+          </Button>
+        </div>
+      ) : null}
+
+      {isCanceled ? (
+        <div className={css.actions}>
+          <Button
+            variant="secondary"
+            onClick={() => void onDelete?.(booking._id)}
+            disabled={isLoading}
+            className={css.deleteBtn}
+          >
+            Delete booking
           </Button>
         </div>
       ) : null}
