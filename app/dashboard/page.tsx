@@ -28,21 +28,22 @@ export default function DashboardPage() {
 
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
-  // fetch bookings when active user changes
+  const isClient = activeUser?.role === "client";
+  const view: "client" | "business" = isClient ? "client" : "business";
+  const title = isClient ? "My bookings" : "Bookings for my business";
+
+  const fetchParams = useMemo(() => {
+    if (!activeUser) return undefined;
+
+    if (activeUser.role === "client") return { clientId: activeUser._id };
+    return { businessId: activeUser._id };
+  }, [activeUser]);
+
   useEffect(() => {
-    if (!activeUser) return;
+    if (!fetchParams) return;
+    fetchBookings(fetchParams);
+  }, [fetchParams, fetchBookings]);
 
-    if (activeUser.role === "client") {
-      fetchBookings({ clientId: activeUser._id });
-      return;
-    }
-
-    if (activeUser.role === "business") {
-      fetchBookings({ businessId: activeUser._id });
-    }
-  }, [activeUser, fetchBookings]);
-
-  // ensure users list exists (needed for businessOptions in BookingForm)
   useEffect(() => {
     if (!activeUser) return;
     if (users.length === 0) fetchUsers();
@@ -54,7 +55,31 @@ export default function DashboardPage() {
       .map((u) => ({ id: u._id, label: u.name }));
   }, [users]);
 
-  const closeEdit = () => setEditingBooking(null);
+  const closeEdit = async () => {
+    setEditingBooking(null);
+
+    if (!activeUser) return;
+
+    if (activeUser.role === "client") {
+      await fetchBookings({ clientId: activeUser._id });
+    } else {
+      await fetchBookings({ businessId: activeUser._id });
+    }
+  };
+
+  const handleCancel = async (id: string) => {
+    const ok = await cancelBooking(id);
+
+    if (editingBooking?._id === id) {
+      closeEdit();
+    }
+
+    if (ok && fetchParams) {
+      await fetchBookings(fetchParams);
+    }
+
+    return ok;
+  };
 
   if (!activeUser) {
     return (
@@ -66,10 +91,6 @@ export default function DashboardPage() {
       </main>
     );
   }
-
-  const isClient = activeUser.role === "client";
-  const title = isClient ? "My bookings" : "Bookings for my business";
-  const view = isClient ? "client" : "business";
 
   return (
     <main className={css.page}>
@@ -86,7 +107,7 @@ export default function DashboardPage() {
           view={view}
           isLoading={isLoading}
           error={error}
-          onCancel={cancelBooking}
+          onCancel={handleCancel}
           onEdit={(b) => setEditingBooking(b)}
         />
       </div>

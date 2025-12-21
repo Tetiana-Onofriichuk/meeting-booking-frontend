@@ -69,6 +69,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     try {
       const booking = await apiCreateBooking(data);
 
+      // Бекенд сортує по startAt ASC -> підтримуємо такий самий порядок
       set((state) => ({
         bookings: [...state.bookings, booking].sort(
           (a, b) =>
