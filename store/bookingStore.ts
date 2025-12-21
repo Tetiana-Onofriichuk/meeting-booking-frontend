@@ -62,17 +62,16 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   fetchBookings: async (params) => {
     set({ isLoading: true, error: null });
     try {
-      const bookings = await getBookings(params);
-      set({ bookings });
+      const list = await getBookings(params);
+      set({ bookings: Array.isArray(list) ? list : [] });
     } catch (e) {
       const message =
         e instanceof Error ? e.message : "Failed to fetch bookings";
-      set({ error: message });
+      set({ error: message, bookings: [] });
     } finally {
       set({ isLoading: false });
     }
   },
-
   createBooking: async (data) => {
     set({ isLoading: true, error: null });
     try {
