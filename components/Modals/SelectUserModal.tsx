@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 import css from "./SelectUserModal.module.css";
+
 import { useUserStore } from "@/store/userStore";
 import Button from "@/components/Button/Button";
+import Loading from "@/app/loading";
 
 type Props = {
   onClose: () => void;
@@ -14,16 +16,20 @@ export default function SelectUserContent({ onClose, onOpenCreate }: Props) {
   const { users, fetchUsers, setActiveUser, isLoading, error } = useUserStore();
 
   useEffect(() => {
-    if (users.length === 0) fetchUsers();
-  }, [users.length, fetchUsers]);
+    if (users.length === 0 && !isLoading) {
+      fetchUsers();
+    }
+  }, [users.length, isLoading, fetchUsers]);
+
+  const isEmpty = users.length === 0;
 
   return (
-    <div className="body">
-      {error && users.length === 0 ? (
+    <div className={css.body}>
+      {error && isEmpty ? (
         <div className={css.errorBox}>{error}</div>
-      ) : isLoading && users.length === 0 ? (
-        <div className={css.muted}>Loading…</div>
-      ) : users.length === 0 ? (
+      ) : isLoading && isEmpty ? (
+        <Loading minHeight={220} size={36} label="Loading users" />
+      ) : isEmpty ? (
         <div className={css.muted}>No users found. Create a new one.</div>
       ) : (
         <div className={css.list}>
@@ -52,6 +58,7 @@ export default function SelectUserContent({ onClose, onOpenCreate }: Props) {
               onClose();
               onOpenCreate();
             }}
+            disabled={isLoading}
           >
             Sign up
           </Button>
