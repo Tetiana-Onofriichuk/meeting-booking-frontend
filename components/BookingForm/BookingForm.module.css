@@ -65,7 +65,7 @@
 .submit {
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid var(var(--color-neutral-darkest));
+  border: 1px solid var(--color-neutral-darkest);
   background: var(--color-neutral-darkest);
   color: var(--color-white);
   cursor: pointer;
