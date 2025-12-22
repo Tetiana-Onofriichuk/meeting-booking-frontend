@@ -15,7 +15,7 @@ The application focuses on clean UI architecture, separation of concerns, access
 
 ## 🚀 Live Demo
 
-👉 https://YOUR-VERCEL-LINK.vercel.app
+👉 https://meeting-booking-frontend.vercel.app/
 
 ---
 
