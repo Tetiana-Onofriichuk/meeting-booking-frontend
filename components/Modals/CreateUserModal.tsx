@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import css from "./CreateUserModal.module.css";
+
 import { useUserStore } from "@/store/userStore";
 import Button from "@/components/Button/Button";
 import Dropdown, { DropdownOption } from "@/components/Dropdown/Dropdown";
+import Loading from "@/app/loading";
 import { validateUserForm } from "@/lib/userValidators";
 
 type Role = "client" | "business";
@@ -28,7 +30,7 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<Role>("client");
 
-  const [formError, setFormError] = useState<string>("");
+  const [formError, setFormError] = useState("");
 
   const canSubmit = useMemo(() => {
     if (isLoading) return false;
@@ -52,6 +54,8 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
   }, []);
 
   const submit = async () => {
+    if (isLoading) return;
+
     setFormError("");
 
     const err = validateUserForm({ name, email });
@@ -74,86 +78,82 @@ export default function CreateUserModal({ onClose, onOpenSelect }: Props) {
 
   return (
     <>
+      {/* Errors */}
       {formError ? <div className={css.errorBox}>{formError}</div> : null}
-
       {!formError && apiError ? (
         <div className={css.errorBox}>{apiError}</div>
       ) : null}
 
-      <form
-        className={css.body}
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit();
-        }}
-      >
-        <label className={css.field}>
-          <span className={css.label}>Name (max 8 chars)</span>
-          <input
-            className={css.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Tetiana"
-            autoFocus
-            disabled={isLoading}
+      {isLoading ? (
+        <Loading minHeight={240} size={36} label="Creating user" />
+      ) : (
+        <form
+          className={css.body}
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
+          }}
+        >
+          <label className={css.field}>
+            <span className={css.label}>Name (max 8 chars)</span>
+            <input
+              className={css.input}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Tetiana"
+              autoFocus
+            />
+          </label>
+
+          <label className={css.field}>
+            <span className={css.label}>Email</span>
+            <input
+              className={css.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="mail@example.com"
+              inputMode="email"
+              autoComplete="email"
+            />
+          </label>
+
+          <Dropdown
+            label="Role"
+            value={role}
+            options={ROLE_OPTIONS}
+            onChange={(v) => setRole(v as Role)}
           />
-        </label>
 
-        <label className={css.field}>
-          <span className={css.label}>Email</span>
-          <input
-            className={css.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="mail@example.com"
-            disabled={isLoading}
-            inputMode="email"
-            autoComplete="email"
-          />
-        </label>
-
-        <Dropdown
-          label="Role"
-          value={role}
-          options={ROLE_OPTIONS}
-          disabled={isLoading}
-          onChange={(v) => setRole(v as Role)}
-        />
-
-        <div className={css.actions}>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={!canSubmit}
-            className={css.btnCreate}
-          >
-            {isLoading ? "Creating…" : "Create"}
-          </Button>
-
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            disabled={isLoading}
-          >
-            Cancel
-          </Button>
-        </div>
-
-        {onOpenSelect && (
-          <div className={css.footer}>
+          <div className={css.actions}>
             <Button
-              variant="secondary"
-              onClick={() => {
-                handleClose();
-                onOpenSelect();
-              }}
-              disabled={isLoading}
+              type="submit"
+              variant="primary"
+              disabled={!canSubmit}
+              className={css.btnCreate}
             >
-              Log in
+              Create
+            </Button>
+
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
             </Button>
           </div>
-        )}
-      </form>
+
+          {onOpenSelect && (
+            <div className={css.footer}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  handleClose();
+                  onOpenSelect();
+                }}
+              >
+                Log in
+              </Button>
+            </div>
+          )}
+        </form>
+      )}
     </>
   );
 }
